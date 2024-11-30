@@ -2,16 +2,16 @@ package com.example.tarea.Controllers;
 
 import com.example.tarea.Entities.Student;
 import com.example.tarea.Repositories.StudentRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/")
 public class StudentController {
 
     final StudentRepository studentRepository;
@@ -20,58 +20,45 @@ public class StudentController {
         this.studentRepository = studentRepository;
     }
 
-    @GetMapping("/listar")
-    public List<Student> sub1(@RequestParam String facultad) {
+    @GetMapping("/student/{facultad}")
+    public List<Student> sub1(@PathVariable String facultad) {
         return studentRepository.findByFacultadOrderByFacultadDesc(facultad);
 
     }
 
-    /*GetMapping("/sub2")
-    public String sub2(@RequestParam("tipo") Long  tipo,
-                        @RequestParam("color") Long  color,
-                        @RequestParam("ocasion") Long  ocasion, Model model){
-        //SUMAR LISTAS
-        List<Flores> floresLis1 = floresRepository.findAll();
-        List<Flores> floresLis2 = floresRepository.findAll();
-        List<Flores> listaSumada = new ArrayList<>(floresLis1);
+    @PostMapping(value = "/student/agregar")
+    public ResponseEntity<HashMap<String, Object>> agregarEstudiante(
+            @RequestBody Student newStudent) {
 
-        model.addAttribute("cosas", listaSumada);
-        return "plantilla";
-     */
+        HashMap<String, Object> response = new HashMap<>();
+        List<Student> students = studentRepository.findByFacultad(newStudent.getFacultad());
+        if(students.size() < 10){
+            if(newStudent.getGpa() < 3.5){
+                response.put("Estado", "no creado");
+                response.put("Motivo", "no cumple con el mínimo de 3.5 de gpa");
+            } else {
+                studentRepository.save(newStudent);
+                response.put("Estado", "creado");
+                return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            }
 
-    /*@GetMapping("/editar")
-    public String editarBase(Model model,
-                                  @RequestParam("idEmployee") Integer id) {
-        List<Job> listaJobs = employeesJobRepository.findAll();
-        model.addAttribute("listaJobs", listaJobs);
-        Optional<Employee> optionalEmployee = employeesRepository.findById(id);
-
-        if(optionalEmployee.isPresent()) {
-            Employee employee = optionalEmployee.get();
-            model.addAttribute("employee", employee);
-            return "catalogo";
-        }else{
-            return "redirect:/tarea/listar";
+        } else {
+            response.put("Estado", "no creado");
+            response.put("Motivo", "ya se llegó al límite de máximo 10 estudiantes");
         }
-    }*/
+        return ResponseEntity.badRequest().body(response);
 
-    /*@PostMapping("/guardar")
-    public String guardar (Employee employee) {
-        employeesRepository.save(employee);
-        return "redirect:/tarea/listar";
-    }*/
+    }
 
-    /*@GetMapping("/borrar")
-    public String borrarEmpleado(Model model, @RequestParam("idEmployee") int id, RedirectAttributes redirectAttributes) {
-        try {
-            employeesRepository.deleteById(id);
-            redirectAttributes.addFlashAttribute("mensaje", "Se borró el empleado");
-            redirectAttributes.addFlashAttribute("alertClass", "alert-success");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("mensaje", "No se pudo borrar el empleado");
-            redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
-        }
-        return "redirect:/employee/listar";
-    }*/
+    public void actualizarGpa(Integer id, Float nuevoGpa) {
+        Student estudiante = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Estudiante no encontrado"));
+        estudiante.setGpa(nuevoGpa);
+        studentRepository.save(estudiante);
+    }
+
+    public void eliminarEstudiante(Integer id) {
+        studentRepository.deleteById(id);
+    }
+
 
 }
