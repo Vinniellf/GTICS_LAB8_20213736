@@ -29,7 +29,7 @@ public class StudentController {
 
     }
 
-    @PostMapping(value = "/agregar")
+    @PostMapping(value = "")
     public ResponseEntity<HashMap<String, Object>> agregarEstudiante(
             @RequestBody Student newStudent) {
 
@@ -53,7 +53,7 @@ public class StudentController {
 
     }
 
-    @PutMapping(value="/actualizar")
+    @PutMapping(value="")
     public ResponseEntity<HashMap<String, Object>> actualizarGpa(
             @RequestBody Student newStudent) {
         HashMap<String, Object> response = new HashMap<>();
@@ -95,6 +95,7 @@ public class StudentController {
 
     }
 
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<HashMap<String, Object>> eliminarEstudiante(@PathVariable("id") String id) {
         HashMap<String, Object> response = new HashMap<>();
 
@@ -106,7 +107,7 @@ public class StudentController {
                 return ResponseEntity.ok(response);
             } else{
                 response.put("Estado", "error");
-                response.put("Motivo", "El estudiante con id " + id +"no existe");
+                response.put("Motivo", "El estudiante con id " + id +" no existe");
                 return ResponseEntity.badRequest().body(response);
             }
 
