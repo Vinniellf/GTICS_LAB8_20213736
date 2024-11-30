@@ -1,24 +1,29 @@
 package com.example.tarea.Controllers;
 
-import ch.qos.logback.core.model.Model;
-import com.example.tarea.Repositories.BaseRepository;
-import org.springframework.stereotype.Controller;
+import com.example.tarea.Entities.Student;
+import com.example.tarea.Repositories.StudentRepository;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping("/tarea")
-public class BaseController {
+import java.util.List;
 
-    final BaseRepository baseRepository;
+@RestController
+@RequestMapping("/student")
+public class StudentController {
 
-    public BaseController(BaseRepository baseRepository) {
-        this.baseRepository = baseRepository;
+    final StudentRepository studentRepository;
+
+    public StudentController(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
     }
 
-    @GetMapping("/sub1")
-    public String sub1(Model model) {
-        return "plantilla";
+    @GetMapping("/listar")
+    public List<Student> sub1(@RequestParam String facultad) {
+        return studentRepository.findByFacultadOrderByFacultadDesc(facultad);
+
     }
 
     /*GetMapping("/sub2")
