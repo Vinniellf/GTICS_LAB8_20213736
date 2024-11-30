@@ -82,7 +82,7 @@ public class StudentController {
                 studentRepository.save(newStudent);
                 response.put("Estado", "actualizado");
                 return ResponseEntity.ok(response);
-                
+
             } else{
                 response.put("Estado", "error");
                 response.put("Motivo", "El estudiante a actualizar no existe");
@@ -95,8 +95,26 @@ public class StudentController {
 
     }
 
-    public void eliminarEstudiante(Integer id) {
-        studentRepository.deleteById(id);
+    public ResponseEntity<HashMap<String, Object>> eliminarEstudiante(@PathVariable("id") String id) {
+        HashMap<String, Object> response = new HashMap<>();
+
+        try{
+            Integer idStudent = Integer.parseInt(id);
+            if(studentRepository.existsById(idStudent)){
+                studentRepository.deleteById(idStudent);
+                response.put("Estado", "eliminado correctamente");
+                return ResponseEntity.ok(response);
+            } else{
+                response.put("Estado", "error");
+                response.put("Motivo", "El estudiante con id " + id +"no existe");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+        } catch (NumberFormatException e){
+            response.put("Estado", "error");
+            response.put("Motivo", "El ID debe ser un número");
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
