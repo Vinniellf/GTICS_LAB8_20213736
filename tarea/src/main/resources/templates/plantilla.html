@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Flores</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .flower-img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+        .nav-link {
+            margin-left: auto;
+        }
+        .nav-item img {
+            margin-left: 10px;
+        }
+        .total-flores {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- NAVBAR -->
+    <!--
+    <header class="text-center my-4">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/lab/catalogo">
+                <img src="https://img.freepik.com/vector-premium/ramo-flores-amarillas-icono-decorativo-flor-jardin_543062-3918.jpg?w=2000" width="30" height="30" class="d-inline-block align-top" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" href="/lab/catalogo">Catálogo <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" href="/lab/entretenimineto">Entretenimiento</a>
+                </div>
+            </div>
+            <a class="nav-item nav-link" href="#">
+                <img src="https://img.icons8.com/ios-filled/50/000000/shopping-cart.png" width="30" height="30" alt="Carrito de compras">
+            </a>
+        </nav>
+    </header>
+    -->
+
+    <!-- ENCABEZADO -->
+    <!--
+    <section class="highlight text-center">
+        <h2>¡Celebra el 21 de septiembre con flores amarillas!</h2>
+        <p>Explora nuestra colección especial de flores amarillas.</p>
+    </section>-->
+
+    <!-- Filtro -->
+    <!--
+    <section class="mb-4">
+        <form id="filterForm" action="/tarea/filtrar" method="get">
+            <div class="row align-items-end">
+                <!-- TEXTO -->
+                <div class="col-md-4">
+                    <label for="nombre" class="form-label">Buscar por Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Nombre de la receta" class="form-control" th:value="${param.nombre}"/>
+                </div>
+                <!-- COMBO -->
+                <div class="col-md-4">
+                    <select class="form-control" id="color" name="color">
+                        <option value="0">Selecciona Color</option>
+                        <option th:each="color : ${colors}"
+                                th:value="${color.id}"
+                                th:text="${color.name}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- BOTÓN FILTRAR -->
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary">Filtrar</button>
+                </div>
+            </div>
+        </form>
+    </section>
+    -->
+
+    <!--TABLE -->
+    <!--
+    <div class="container mt-5">
+
+        <!-- Botón para agregar un nuevo auto -->
+        <div class="mb-3">
+            <a class="btn btn-success" th:href="@{'/receta/agregar'}">Agregar una nueva receta</a>
+        </div>
+    
+        <h2 class="mb-4">Lista de Recetas</h2>
+        <h3 class="text-center mb-4">Lista de Registros</h3>
+
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">DNI</th>
+                <th scope="col">Código PUCP</th>
+                <th scope="col">Opciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each = "persona : ${lista}">
+                <th>1</th>
+                <td th:text="${persona.getNombre()}"></td>
+                <td th:text="${persona.getApellido()}"></td>
+                <td th:text="${persona.getDni()}"></td>
+                <td th:text="${persona.getCodigo()}"></td>
+                <td class="fw-bold">
+                    <a class="btn btn-info" th:href="@{'/receta/leer?idReceta=' + ${receta.idreceta}}">Leer</a>
+                    <a class="btn btn-success" th:href="@{'/lab/editar?idEmployee=' + ${persona.id}}">Editar</a>
+                    <a class="btn btn-danger" th:href="@{'/lab/borrar?idEmployee=' + ${persona.id}}">Borrar</a>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+    -->
+
+    <!--CARDS - 3 por row -->
+    <!--
+    <section class="row mt-4" id="flowerCards">
+        <th:block th:each="flor : ${flores}">
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img class="card-img-top" th:src="${flor.imagen}" alt="Imagen de ${flor.nombre}">
+                    <div class="card-body text-center">
+                        <p class="card-text" th:text="${flor.descripcion}">Descripción de la flor.</p>
+                        <h5 class="card-title" th:text="${flor.precio} + ' PEN'">Precio de la flor</h5>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-success">Agregar</button>
+                            <button type="button" class="btn btn-danger">Quitar</button>
+                            <button type="button" class="btn btn-info">Comprar directamente</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </section>
+    -->
+
+    <!-- Total de ALGO -->
+    <!--
+    <div class="total-flores">
+        Total de flores disponibles: <span th:text="${#lists.size(flores)}">0</span>
+    </div>
+    -->
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
