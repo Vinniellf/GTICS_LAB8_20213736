@@ -15,7 +15,7 @@ public class Student {
     private String nombre;
 
     @Column(name = "gpa", nullable = false)
-    private float gpa;
+    private Float gpa;
 
     @Column(name = "facultad", nullable = false, length = 100)
     private String facultad;
@@ -39,11 +39,11 @@ public class Student {
         this.nombre = nombre;
     }
 
-    public float getGpa() {
+    public Float getGpa() {
         return gpa;
     }
 
-    public void setGpa(float gpa) {
+    public void setGpa(Float gpa) {
         this.gpa = gpa;
     }
 
