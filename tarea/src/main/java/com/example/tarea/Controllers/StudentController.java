@@ -2,8 +2,10 @@ package com.example.tarea.Controllers;
 
 import com.example.tarea.Entities.Student;
 import com.example.tarea.Repositories.StudentRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +36,8 @@ public class StudentController {
         List<Student> students = studentRepository.findByFacultad(newStudent.getFacultad());
         if(students.size() < 10){
             if(newStudent.getGpa() < 3.5){
-                response.put("Estado", "no creado");
                 response.put("Motivo", "no cumple con el mínimo de 3.5 de gpa");
+                response.put("Estado", "no creado");
             } else {
                 studentRepository.save(newStudent);
                 response.put("Estado", "creado");
@@ -43,8 +45,8 @@ public class StudentController {
             }
 
         } else {
-            response.put("Estado", "no creado");
             response.put("Motivo", "ya se llegó al límite de máximo 10 estudiantes");
+            response.put("Estado", "no creado");
         }
         return ResponseEntity.badRequest().body(response);
 
@@ -58,6 +60,17 @@ public class StudentController {
 
     public void eliminarEstudiante(Integer id) {
         studentRepository.deleteById(id);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<HashMap<String, String>> gestionException(HttpServletRequest request){
+        HashMap<String, String> response = new HashMap<>();
+        if(request.getMethod().equals("Post")){
+            response.put("Estado", "error");
+            response.put("Motivo", "Debe agregar un estudiante");
+        }
+
+        return ResponseEntity.badRequest().body(response);
     }
 
 
